@@ -68,6 +68,23 @@
     	});
     }
 
+    var getRoomsByDay = function(day_id) {
+    	var day_list = listByDays();
+    	var rooms = [];
+    	//console.log(day_list);
+    	for (var i in day_list) {
+    		//console.log(day_list[i].id);
+    		if (day_list[i].id == day_id ) {
+	    		for (var x in day_list[i].rooms) {
+	    			rooms.push(x);
+	   				//console.log(day_list[i].rooms[x]);
+	    		}
+    		}
+    	}
+    	
+    	return rooms;
+    }
+
     var listByDays = function() {
 			var day_list = {};
 			var event_days = getEventDays();
@@ -118,7 +135,8 @@
       getSessionsByDay: getSessionsByDay,
       getSessionsByRoom: getSessionsByRoom,
       UnixTimestampToDate: UnixTimestampToDate,
-      listByDays: listByDays
+      listByDays: listByDays,
+      getRoomsByDay: getRoomsByDay
 
     }
 
@@ -142,7 +160,7 @@
 
 		// var speaker_request = OSApp.get("http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/speakers/20071");
 		// var speaker_sessions_request = OSApp.get("http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/speakers/20071/sessions");
-		// var session_speakers_request = OSApp.get("http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions/13974/speakers");
+		//var session_speakers_request = OSApp.get("http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions/13974/speakers");
 
 		$.when (speakers_request, sessions_request, session_days_request, session_streams)
 			.done(function (data1, data2, data3, data4) {
@@ -166,28 +184,143 @@
 		Init();
 	});
 
+	var template_session = function(session_data) {
+		return '<div id="session" class="">\
+							<p class="date">'+session_data.opening+' - '+session_data.closing+'</p>\
+							<p class="title">\
+								<a href="http://example.com" title="">'+session_data.title+'</a>\
+							</p>\
+							<h3>SPEAKERS</h3>\
+							<p class="speakers"></p>\
+						</div>';
+	}
+
+
+	var template_room = function(room_data) {
+		return '<div id="room" class="">\
+							<h1>Di_mad</h1>\
+							<p class="">Demo Zone</p>\
+						</div>';
+	}
+
+	var template_day = function(day_data) {
+		var line = "";
+		var wrapper_start = '<div id="day" class="">\
+													<h1>DIA 1</h1>\
+													<p class=""><strong>'+day_data.date+'</strong></p>\
+													<div class="container">\
+														<div class="todos_los_espacios"><a href="#">TODOS LOS ESPACIOS</a></div>\
+															<div class="espacios">';
+																for (var i in day_data.rooms) {
+																	line += '<p><a href="#">'+ day_data.rooms[i] +' DI_MAD - DEMO ZONE</a></p>';
+																}
+		var wrapper_end =				'</div>\
+														</div>\
+													</div>\
+												</div>';
+
+		return wrapper_start + line + wrapper_end;
+	}
+
+
+
+
 	function Init(){
-		// console.log(OSApp.getSessions());
+		console.log(OSApp.getSessions());
 		// console.log(OSApp.getSpeakers());
-		// console.log(OSApp.getEventDays());
+		//console.log(OSApp.getEventDays());
+		//console.log(OSApp.getRooms());
 		// console.log(OSApp.getStreams());
 	  // ListDays();
 	 	// listSessions(83829, "ES");
 	 	console.log(OSApp.listByDays());
+	 	console.log(OSApp.getRoomsByDay(83829));
 
 	 	var list = OSApp.listByDays();
 
-	 	var template = "";
+	 	//printPrueba(list);
+	 	printDays(OSApp.getEventDays())
+	 	//printSessions(83829, 6123, list);
+	 	printAllSessionsByRoomsOfDay(83829, list);
+
+	 	
+	}
+
+
+	function printDays(days) {
+		var template = "";
+		
+		for (var i in days) {
+				var day = {
+					closing: days[i].closing,
+					date: days[i].date,
+					day: days[i].day,
+					event_id: days[i].event_id,
+					id: days[i].id,
+					opening: days[i].id,
+					rooms: OSApp.getRoomsByDay(days[i].id)
+				};
+			template += template_day(day);
+			var content = document.getElementById("content-days")
+	 		content.innerHTML = template;
+		}
+	}
+
+	function printAllSessionsByRoomsOfDay(day, list) {
+		var template = "";
+		for (var i in list) {
+			if (list[i].id == day) {
+				var rooms = OSApp.getRoomsByDay(day);
+				rooms.forEach(function(value, index){
+					template += '<div>';
+					template += '<h1>'+index+'Di_.....</h1>';
+					template += rederSessions(day, value, list);
+					template += '</div>';
+				});
+			}
+		}
+		var content = document.getElementById("content-sessions");
+	 	content.innerHTML = template;
+	}
+
+	function printSessions(day, room, list) {
+		var content = document.getElementById("content-sessions");
+	 	content.innerHTML = rederSessions(day, room, list);
+	}	
+
+	function rederSessions(day, room, list) {
+		var template = "";
+		var sessions;
+		for (var i in list) {
+			if (list[i].id == day) {
+				for (var x in list[i].rooms) {
+					if (x == room) {
+						sessions = list[i].rooms[x];
+					}
+				}
+			}
+		}
+		sessions.forEach(function(value){
+			template += template_session(value);
+		});
+		return template;
+	}
+
+
+	function printPrueba(list) {
+		var template = "";
 	 	for (var i in list) {
 	 		var rooms_tpl = "";
 	 		for (var x in list[i].rooms) {
 	 			var session_tpl = "";
 	 			for (var z in list[i].rooms[x]) {
-	 				var element = '<div class="">\
-	  										<p><strong>'+list[i].rooms[x][z].title+':</strong> time: '+list[i].rooms[x][z].opening+' - '+list[i].rooms[x][z].closing+'</p>\
-	  										<p> room: '+list[i].rooms[x][z].room+': day_id: '+list[i].rooms[x][z].event_day_id+'</p>\
-	 									</div>';
-	 				session_tpl += element;
+	 				// var element = '<div class="">\
+	  			// 							<p><strong>'+list[i].rooms[x][z].title+':</strong> time: '+list[i].rooms[x][z].opening+' - '+list[i].rooms[x][z].closing+'</p>\
+	  			// 							<p> room: '+list[i].rooms[x][z].room+': day_id: '+list[i].rooms[x][z].event_day_id+'</p>\
+	 				// 					</div>';
+
+	 				//session_tpl += element;
+	 				session_tpl += template_session(list[i].rooms[x][z]);
 	 			}
 	 			rooms_tpl += '<div class=""><h3>room</h3>'+session_tpl+'</div>';
 	 		}
@@ -198,7 +331,6 @@
 	 	var content = document.getElementById("content")
 	 	content.innerHTML = template;
 	}
-
 
 
 	function ListDays(){

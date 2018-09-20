@@ -1,0 +1,25 @@
+#container {
+	text-align: left;
+	width: 750px;
+	margin: auto;
+}
+
+#content-days {
+	width: 180px;
+	float: left;
+	height: 100%;
+}
+
+
+#content-sessions {
+	margin-left:190px;
+	padding-left: 100px;
+	padding-right: 100px;
+	
+}
+
+#session {
+	border:#ccc 1px solid;
+	margin-top: 10px;
+	background-color: #ccc;
+}
