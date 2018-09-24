@@ -136,23 +136,24 @@
 			  console.log(data);
 			  // get days
 			  data.forEach(function(e,i){
-			  	sessions[e.event_day_id] = [];
-			  	sessions[e.event_day_id]["day"] = OSApp.getDayById(e.event_day_id);
-			  	
+			  	var session = []
+			  	sessions[e.event_day_id];
+			  	session["day"] = OSApp.getDayById(e.event_day_id);
+			  	session["sessions"] = [];
+			  	speaker_sessions.push(sessions);	
 			  });
-			  speaker_sessions.push(sessions);
 
 			  console.log(speaker_sessions);
 
 			  data.forEach(function(e,i){
 
-			  	speaker_sessions.forEach(function(es){
-			  		var sessions = [];
-			  		if(es.event_day_id = e.event_day_id) {
-			  			console.log("es igual...");
-			  			sessions.push(OSApp.getSessionById(e.id));
-			  		}
-			  	})
+			  	// speaker_sessions.forEach(function(es){
+			  	// 	var sessions = [];
+			  	// 	if(es.event_day_id = e.event_day_id) {
+			  	// 		console.log("es igual...");
+			  	// 		sessions.push(OSApp.getSessionById(e.id));
+			  	// 	}
+			  	// })
 
 			  	// sessions[e.event_day_id] = [];
 			  	// sessions[e.event_day_id]["day"] = OSApp.getDayById(e.event_day_id);
@@ -194,7 +195,7 @@
 			  	//console.log(OSApp.getDayById(e.event_day_id))
 			  	
 			  })
-			  console.log(speaker_sessions);
+			  //console.log(speaker_sessions);
 			  //var sessions = [];
 
 			}) 
