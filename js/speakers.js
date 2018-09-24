@@ -28,9 +28,9 @@
 	}
 
 	OSAppInitialize(function(){
-		console.log(OSApp.getSpeakers());
-		console.log(OSApp.getStreams());
-		console.log(OSApp.getSessions());
+		// console.log(OSApp.getSpeakers());
+		// console.log(OSApp.getStreams());
+		// console.log(OSApp.getSessions());
 		console.log(OSApp.getEventProgram());
 		console.log(OSApp.getEventDays());
 
@@ -80,6 +80,13 @@
 	function renderSpeaker(speaker){
 		var template = "";
 		template += template_single_speaker(speaker);
+		speaker.sessions.filter(function(sessions, index){
+			template += template_single_day(OSApp.getDayById(index));
+			sessions.forEach(function(session){
+				template += template_single_sessions(session);	
+			})
+			
+		})
 		return template;
 	}	
 
@@ -98,22 +105,36 @@
 						</div>';
 	}
 
+	var template_single_day = function(day){
+		return '<div id="day" >\
+							<p class="description">DÍA '+day.day_num+'</p>\
+							<p class="description">'+day.date+'</p>\
+						</div>';
+	}
+
+	var template_single_sessions = function(session){
+		return '<div id="lightBox" >\
+								<div id="speaker" class="">\
+									<p class="name">'+session.opening+' '+session.closing+'</p>\
+									<p class="role">'+session.title+'</p>\
+								</div>\
+						</div>';
+	}
+
 
 	$("#content-speakers").on("click", "a", function(e){
 		e.preventDefault();
+		
 		var speaker_id = e.currentTarget.dataset.speaker;
 		var speaker_request = OSApp.getSpeakerById(speaker_id);
-		console.log(speaker_request);
+		
 		var speaker_sessions_request = OSApp.get("http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/speakers/"+speaker_id+"/sessions")
-
 		$.when (speaker_sessions_request)
 			.done(function (data) {
-			  var speaker_sessions = [];
-			  data.forEach(function(e){
-			  	speaker_sessions.push(OSApp.getSessionById(e.id));
-			  })
+			  var sessions = prepareSpeaker(data);
+			  speaker_request.sessions = sessions;
 			  printSpeaker(speaker_request);
-			  prepareSpeaker(speaker_id);
+			  
 			}) 
 			.fail(function (err1, err2, err3, err4) {
 			  console.log(err1);
@@ -123,86 +144,20 @@
 
 
 
-	function prepareSpeaker(speaker_id) {
-		var speaker = OSApp.getSpeakerById(speaker_id);
-		var speaker_sessions_request = OSApp.get("http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/speakers/"+speaker_id+"/sessions")
+	function prepareSpeaker(data) {
+		
+			var speaker_sessions = [];
+		  
+			// get days
+			data.forEach(function(value){
+		  	speaker_sessions[value.event_day_id] = [];
+		  })
 
-
-
-		$.when (speaker_sessions_request)
-			.done(function (data) {
-			  var speaker_sessions = [];
-			  var sessions = [];
-			  console.log(data);
-			  // get days
-			  data.forEach(function(e,i){
-			  	var session = []
-			  	sessions[e.event_day_id];
-			  	session["day"] = OSApp.getDayById(e.event_day_id);
-			  	session["sessions"] = [];
-			  	speaker_sessions.push(sessions);	
-			  });
-
-			  console.log(speaker_sessions);
-
-			  data.forEach(function(e,i){
-
-			  	// speaker_sessions.forEach(function(es){
-			  	// 	var sessions = [];
-			  	// 	if(es.event_day_id = e.event_day_id) {
-			  	// 		console.log("es igual...");
-			  	// 		sessions.push(OSApp.getSessionById(e.id));
-			  	// 	}
-			  	// })
-
-			  	// sessions[e.event_day_id] = [];
-			  	// sessions[e.event_day_id]["day"] = OSApp.getDayById(e.event_day_id);
-			  	// sessions[e.event_day_id]["sessions"] = [];
-			  	// // console.log(i);
-			  	// var session = OSApp.getSessionById(e.id);
-			  	// sessions[i] = [];
-			  	// sessions[i][e.event_day_id] = {}
-			  	// sessions[i][e.event_day_id] = OSApp.getDayById(e.event_day_id);
-			  	// sessions[i][e.event_day_id]["sessions"] = {};
-			  	// sessions[i][e.event_day_id]["sessions"][session.id] = session;
-			  	
-
-			  	// var session_id = {};
-			  	// session_id.id = {}
-			  	// session_id.id = session.id;
-			  	// session_id.id.session = {};
-			  	// session_id.id.session = session;
-
-					
-		  	
-			  	//sessions.push(session);
-			  	// sessions[e.event_day_id]['day'] = OSApp.getDayById(e.event_day_id);
-			  	// sessions[e.event_day_id]['day']['sessions'] = [];
-
-			  	// sessions[e.event_day_id]['day']['sessions']['session'] = [];
-			  	// sessions[e.event_day_id]['day']['sessions']['session'][session.id] = [];
-			  	// sessions[e.event_day_id]['day']['sessions']['session'][session.id].push(session);
-			  	//sessions[e.event_day_id].push(session);
-			  	//sessions[e.event_day_id]['day']['sessions']['session'].push(session);
-			  	//sessions[e.event_day_id]['day']['sessions'][e.id] = 
-			  	//sessions[e.event_day_id][e.id].push(OSApp.getDayById(e.event_day_id));
-			  	//sessions[e.event_day_id][e.id]['day'] = OSApp.getDayById(e.event_day_id);
-			  	//sessions[e.event_day_id][e.id]['session'] = session;
-			  	//sessions[e.event_day_id][0].push(session);
-			  	
-			  	//session.eventday = OSApp.getDayById(e.event_day_id);
-			  	// speaker_sessions.push(sessions);
-			  	//console.log(OSApp.getDayById(e.event_day_id))
-			  	
-			  })
-			  //console.log(speaker_sessions);
-			  //var sessions = [];
-
-			}) 
-			.fail(function (err1, err2, err3, err4) {
-			  console.log(err1);
-			})
-
+		  data.forEach(function(value, index){
+		  	var session = OSApp.getSessionById(value.id);
+	    	speaker_sessions[value.event_day_id][index] = session;
+	    })
+			return speaker_sessions;
 	}
 
 

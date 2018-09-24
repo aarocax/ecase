@@ -33,7 +33,9 @@
 
 	    // set readable date in event_days
 	    event_days.forEach(function(value, index, array){
-	    	array[index]['date'] = timestampToDate(array[index].day);
+	    	array[index]['date'] = timestampToDate(array[index].day, language);
+	    	array[index]['date_en'] = timestampToDate(array[index].day, "EN");  // fecha en inglés para operar
+	    	array[index]['day_num'] = index+1;
 	    })
 
 	    event_program = generateEventProgram();
@@ -92,13 +94,10 @@
     var getRoomsByDay = function(day_id) {
     	var day_list = rooms;
     	var rooms = [];
-    	//console.log(day_list);
     	for (var i in day_list) {
-    		//console.log(day_list[i].id);
     		if (day_list[i].id == day_id ) {
 	    		for (var x in day_list[i].rooms) {
 	    			rooms.push(x);
-	   				//console.log(day_list[i].rooms[x]);
 	    		}
     		}
     	}
@@ -132,7 +131,6 @@
 			var event_days = getEventDays();
 			event_days.forEach(function(value, index, array){
 				var event_day = value;
-				event_day['date'] = timestampToDate(array[index].day);
 				var day_sessions = getSessionsByDay(value.id, language);
 				var sessions_by_room = {};
 				rooms.forEach(function(value, index, array){
@@ -151,20 +149,26 @@
 		}
 
 		var getDayById = function(id){
-			return event_days.filter(function(e){
+			var day = event_days.filter(function(e){
     		return (e.id == id);
     	});
+    	return day[0];
 		}
 
-    function timestampToDate(t){
+    function timestampToDate(t, lang){
 			var dt = new Date(t*1000);
 			var year = dt.getUTCFullYear();
 			var month = dt.getUTCMonth() + 1;
 			var day = dt.getUTCDate();
-			var hr = dt.getHours();
-			var m = "0" + dt.getMinutes();
-			var s = "0" + dt.getSeconds();
-			return day+'/'+month+'/'+year+' '+hr+ ':' + m.substr(-2) + ':' + s.substr(-2);  
+			// var hr = dt.getHours();
+			// var m = "0" + dt.getMinutes();
+			// var s = "0" + dt.getSeconds();
+			if (lang == "ES") {
+				var date = day+'/'+month+'/'+year;
+			} else {
+				var date = year+'/'+month+'/'+day;
+			}
+			return date;  
 		}
 
     return {
