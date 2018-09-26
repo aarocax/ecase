@@ -31,12 +31,9 @@
 	});
 
 	function Init(){
-		// console.log("speakers:");
-		// console.log(OSApp.getSpeakers());
-		// console.log("sessions:");
-		// console.log(OSApp.getSessions());
-		// console.log("streams:");
-		// console.log(OSApp.getSessions());
+		//13974
+		console.log(OSApp.getNextSession(13995));
+		console.log(OSApp.getNextSession(13974));
 		printSpeakers(OSApp.getSpeakers());
 	}
 
@@ -47,9 +44,12 @@
 
 	function renderSpeakers(speakers){
 		var template = "";
-		speakers.forEach(function(speaker){
-			template += template_speaker(speaker);
-		});
+		for (var i = 0; i < 3; i++) {
+			template += template_speaker(speakers[i]);
+		}
+		// speakers.forEach(function(speaker){
+		// 	template += template_speaker(speaker);
+		// });
 		return template;
 	}
 
@@ -118,8 +118,12 @@
 	}
 
 	var template_single_sessions = function(session){
-		return '<div class="event-hours">'+session.opening+' '+session.closing+'</div>\
-						<div class="event-title">'+session.title+'</div>\
+		return '<div id="lightBox" >\
+							<div id="speaker">\
+								<div class="event-hours">'+session.opening+' '+session.closing+'</div>\
+								<div class="event-title">'+session.title+'</div>\
+							</div>\
+						</div>\
 						</div>\
 						</div>';
 	}
@@ -148,8 +152,6 @@
 
 
 	function prepareSpeaker(data) {
-
-			console.log(data);
 
 			var speaker_sessions = [];
 
