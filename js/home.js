@@ -31,9 +31,6 @@
 	});
 
 	function Init(){
-		//13974
-		console.log(OSApp.getNextSession(13995));
-		console.log(OSApp.getNextSession(13974));
 		printSpeakers(OSApp.getSpeakers());
 	}
 

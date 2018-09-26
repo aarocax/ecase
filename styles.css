@@ -23,3 +23,11 @@
 	margin-top: 10px;
 	background-color: #ccc;
 }
+
+.speaker-item img {
+    display: block;
+    max-width: 250px;
+    width: 100%;
+    border-radius: 50%;
+    margin: 0 auto;
+}

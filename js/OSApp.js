@@ -8,6 +8,7 @@
 	var speakers; 	// Array with all speakers objects
 	var event_days; // Array of days objects
 	var streams; 		// Array of streams objects
+	var sponsors;   // Array of sponsors objects
 	var rooms = []; // Array with rooms names
 	var event_program; // JOSN with all program of event
 	
@@ -40,6 +41,7 @@
 				api_sessions_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions";
 				api_days_url     = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/days";
 				api_streams_url  = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/streams";
+				api_sponsors_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors";
 				pathname = "/bbva/opensummit18/wordpress/";
 				proxy = "wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=";
 				proxy_url = protocol+hostname+pathname+proxy;
@@ -51,6 +53,7 @@
 				api_sessions_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions";
 				api_days_url     = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/days";
 				api_streams_url  = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/streams";
+				api_sponsors_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors";
 				pathname = "/opensummit-api/";
 				proxy = "proxy.php?object=";
 				proxy_url = protocol+hostname+pathname+proxy;
@@ -74,7 +77,7 @@
 	   		sessions[i]['stream'] = result[0];
 	   		sessions[i]['date'] = timestampToDate(sessions[i].time, language);
 	   		sessions[i]['date_en'] = timestampToDate(sessions[i].time, "EN");
-	   		sessions[i]['day_num'] = i+1;
+	   		//sessions[i]['day_num'] = getDayNum(sessions[i].event_day_id);
 	   		// get names of rooms
 	   		lookup[sessions[i]["sala"]] = sessions[i].sala;
 	    }
@@ -87,14 +90,28 @@
 	    event_days.forEach(function(value, index, array){
 	    	array[index]['date'] = timestampToDate(array[index].day, language);
 	    	array[index]['date_en'] = timestampToDate(array[index].day, "EN");  // fecha en inglés para operar
-	    	array[index]['day_num'] = index+1;
+	    	array[index]['day_num'] = parseInt(index+1);
 	    })
 
+	    // set num day to any session
+	    for (var i in sessions) {
+	    	sessions[i]['day_num'] = getDayNum(sessions[i].event_day_id);
+	    }
+
 	    event_program = generateEventProgram();
+
     }
 
     var get = function(url) {
       return $.getJSON(url);
+    }
+
+    function getDayNum(day_id) {
+    	var day_num = event_days.filter(function(e){
+    		return e.id == day_id;
+    	});
+    	//console.log(day_num);
+    	return day_num[0].day_num;
     }
 
     var getApiUrl = function(api){
@@ -112,6 +129,9 @@
 		    case 'streams':
 						url = api_streams_url;
 		        break;
+		    case 'sponsors':
+						url = api_sponsors_url;
+		        break;
 		    default:
 		    		url = null;
 		    		break;
@@ -127,9 +147,9 @@
     	return base_url;
     }
 
-   var getMediaUrl = function(){
-   		return media_url;
-   }
+	  var getMediaUrl = function(){
+	  	return media_url;
+	  }
 
     var setSessions = function(data){
 	  	sessions = data;
@@ -161,6 +181,16 @@
 
     var getStreams = function(){
     	return streams;
+    }
+
+    var setSponsors = function(data){
+    	sponsors = data.filter(function(e){
+    		return (e.languaje == language);
+    	});
+    }
+
+    var getSponsors = function(){
+    	return sponsors;
     }
 
     var getRooms = function(){
@@ -237,6 +267,13 @@
     	return speaker[0];
 		}
 
+		var getSponsorById = function(id){
+			var sponsor = sponsors.filter(function(e){
+    		return (e.id == id && e.languaje == language);
+    	});
+    	return sponsor[0];
+		}
+
     var generateEventProgram = function() {
 			var day_list = {};
 			var event_days = getEventDays();
@@ -296,6 +333,9 @@
       getEventDays: getEventDays,
       setStreams: setStreams,
       getStreams: getStreams,
+      setSponsors: setSponsors,
+      getSponsors: getSponsors,
+      getSponsorById: getSponsorById,
       getRooms: getRooms,
       getEventProgram: getEventProgram, 
       getRoomsByDay: getRoomsByDay,

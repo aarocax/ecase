@@ -8,7 +8,7 @@
 		var sessions_request = OSApp.get(OSApp.getApiUrl("sessions"));
 		var session_days_request = OSApp.get(OSApp.getApiUrl("days"));
 		var session_streams = OSApp.get(OSApp.getApiUrl("streams"));
-		
+
 		$.when (speakers_request, sessions_request, session_days_request, session_streams)
 			.done(function (data1, data2, data3, data4) {
 			  OSApp.setSessions(data2[0]);
@@ -31,15 +31,70 @@
 	});
 
 	function Init(){
+
+		// var all = function(array){
+		//     var deferred = $.Deferred();
+		//     var fulfilled = 0, length = array.length;
+		//     var results = [];
+
+		//     if (length === 0) {
+		//         deferred.resolve(results);
+		//     } else {
+		//         array.forEach(function(promise, i){
+		//             $.when(promise()).then(function(value) {
+		//                 results[i] = value;
+		//                 fulfilled++;
+		//                 if(fulfilled === length){
+		//                     deferred.resolve(results);
+		//                 }
+		//             });
+		//         });
+		//     }
+
+		//     return deferred.promise();
+		// };
+
+		// var promises = [];
+		// var sess = OSApp.getSessions();
+		// sess.forEach(function(session) {
+		//     promises.push(function() {
+		//         return $.Deferred(function(dfd) {
+		//             $.get(
+		//             	OSApp.getProxyUrl()+"https://www.bbvaopensummit.com/api/v1/events/33882/sessions/"+session.id+"/speakers", function(data) {
+		//                dfd.resolve(data);
+		//             });
+		//         }).promise();
+		//     });
+		// });
+
+		// $.when(all(promises))
+		// 	.done(function(results) {
+		// 	    console.log(results);
+		// 	})
+		// 	.fail(function(errors) {
+		// 	    console.log(errors);
+		// 	})
+		// 	.then(function(results) {
+		// 	    console.log(results);
+		// 	},function(errors) {
+		// 	    console.log(errors);
+		// 	})
+
+		// var promises = [];
+		// var sess = OSApp.getSessions();
+		// for(var i = 0; i < sess.length ; i++) {
+		// 	console.log(sess[i].id);
+		// 	var promise = $.get(OSApp.get(OSApp.getProxyUrl()+"https://www.bbvaopensummit.com/api/v1/events/33882/sessions/"+sess[i].id+"/speakers"));
+		// 	promises.push(promise);
+		// }
+		// $.when (promises)
+		// .done
+		// console.log(promises);
+		
+
 		console.log(OSApp.getSessions());
 		printDays(OSApp.getEventProgram());
 		printSessions(83829, OSApp.getEventProgram());
-	}
-
-	function siguienteEvento(){
-		console.log('siguiente evento...');
-		var a = document.getElementById("siguiente-evento");
-	 	a.href = "http://example.com";
 	}
 
 	function printSessionsByRoom(room_name, sessions){
@@ -74,6 +129,7 @@
 							opening: days[i].rooms[x].sessions[z].opening,
 							title: days[i].rooms[x].sessions[z].title,
 							speakers: "pepe, maría, tomás, julián"
+							//speakers: getSpeakers(days[i].rooms[x].sessions[z].id)
 						}
 						sessions[i][x]["sessions"][z] = {};
 						sessions[i][x]["sessions"][z] = session;
@@ -85,6 +141,23 @@
 		var content = document.getElementById("content-sessions");
 	 	content.innerHTML = renderSessions(sessions);
 	}
+
+
+
+	// function getSpeakers(session_id) {
+	// 	console.log(session_id);
+	// 	var session_speakers_request = OSApp.get(OSApp.getProxyUrl()+"https://www.bbvaopensummit.com/api/v1/events/33882/sessions/"+session_id+"/speakers")
+	// 		$.when (session_speakers_request)
+	// 		.done(function (data) {
+	// 		  console.log(data);
+	// 		  return(data);
+	// 		})
+	// 		.fail(function (err1, err2, err3, err4) {
+	// 		  console.log(err1);
+	// 		})
+	// }
+
+
 
 	function renderSessions(sessions) {
 		var template_sala = "";
@@ -113,7 +186,7 @@
 									<a href="">Simón Taylor</a>, <a href="">Elena Alfaro</a>, <a href="">Marco Whenting</a>, <a href="">Leanne Penk</a></p>\
 							</div>\
 							<div class="button-event">\
-								<a href="#">Open Innovation</a>\
+								<a href="'+OSApp.getBaseUrl()+'sesion/'+session_data.id+'/" title="">Full event</a>\
 							</div>\
 						</div>';
 	}
@@ -172,7 +245,7 @@
 	}
 
 
-
+	//**************************************
 
 	//**************************************
 
@@ -183,7 +256,7 @@
 	    		printSessions(e.target.dataset.dayid, OSApp.getEventProgram());
 	        break;
 	    case "Bilbao Stage":
-	    		printSessionsByRoom("Bilbao Stage", OSApp.getSessionsByRoom("Bilbao Stage", OSApp.getSessionsByDay(e.target.dataset.dayid, language)));	
+	    		printSessionsByRoom("Bilbao Stage", OSApp.getSessionsByRoom("Bilbao Stage", OSApp.getSessionsByDay(e.target.dataset.dayid, language)));
 	        break;
 	    case "Mexico Stage":
 	    		printSessionsByRoom("Mexico Stage", OSApp.getSessionsByRoom("Mexico Stage", OSApp.getSessionsByDay(e.target.dataset.dayid, language)));
@@ -198,5 +271,45 @@
 		}
 
 	});
+
+	
+
+
+
+
+
+
+
+	// var targetNode = document.getElementById('content-sessions');
+
+	// // Options for the observer (which mutations to observe)
+	// var config = { attributes: true, childList: true, subtree: true };
+
+	// // Callback function to execute when mutations are observed
+	// var callback = function(mutationsList, observer) {
+	//     for(var mutation of mutationsList) {
+	//         if (mutation.type == 'childList') {
+	//             console.log('A child node has been added or removed.');
+	//             console.log(mutation.addedNodes);
+	//             var addedNodes = mutation.addedNodes;
+	//             Object.keys(addedNodes).forEach(function(key,index) {
+	// 						  console.log(key);
+	// 						  console.log(addedNodes[key]) 
+	// 						});
+	//             // addedNodes.forEach(function(node){
+	//             // 	console.log(node.childNodes)
+	//             // });
+	//         }
+	//         else if (mutation.type == 'attributes') {
+	//             console.log('The ' + mutation.attributeName + ' attribute was modified.');
+	//         }
+	//     }
+	// };
+
+	// // Create an observer instance linked to the callback function
+	// var observer = new MutationObserver(callback);
+
+	// // Start observing the target node for configured mutations
+	// observer.observe(targetNode, config);
 
 })(jQuery, window);

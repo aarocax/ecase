@@ -66,7 +66,6 @@
 
 
 	// Speaker lightBox
-
 	function printSpeaker(speaker) {
 		var content = document.getElementById("lightbox-speaker");
 	 	content.innerHTML = renderSpeaker(speaker);
@@ -81,32 +80,40 @@
 			sessions.forEach(function(session){
 				template += template_single_sessions(session);
 			})
-
+			template += '</div>';
 		})
+		template += '</div></div>';
 		return template;
 	}
 
 	var template_single_speaker = function(speaker){
+		console.log(speaker);
+		var twitter = "";
+		var linkedin = "";
+		var title = (language === "ES") ? "Eventos" : "Events";
+		var photo = "";
+		if (speaker.twitter != "") {
+			twitter = '<a href="'+speaker.twitter+'" class="button-rrss twitter"></a>';
+		}
+		if (speaker.linkedin != "") {
+			linkedin = '<a href="'+speaker.linkedin+'" class="button-rrss linkedin"></a>';
+		}
+		if (speaker.photo_url != "") {
+			photo = '<div id="photo" class="modal-photo"><img src="'+speaker.photo_url+'" alt="" /></div>';
+		}
 		return '<div class="modal-container">\
-								<a class="close-modal"></a>\
-								<div id="photo" class="modal-photo">\
-									<img src="'+speaker.photo_url+'" alt="" />\
-								</div>\
-								<div id="speaker" class="modal-text">\
+								<a class="close-modal"></a>'+photo+
+								'<div id="speaker" class="modal-text">\
 									<div class="modal-text-container">\
 										<div class="title speaker-modal">'+speaker.first_name+' '+speaker.last_name+'</div>\
 										<div class="subtitle speaker-position">'+speaker.role+'</div>\
 										<div>'+speaker.description+'</div>\
-										<div class="rrss">\
-											<a href="'+speaker.linkedin+'" class="button-rrss linkedin"></a>\
-											<a href="'+speaker.twitter+'" class="button-rrss twitter"></a>\
-										</div>\
+										<div class="rrss">'+twitter+linkedin+'</div>\
 									</div>\
 								</div>\
-								<div class="modal-event"><div class="modal-event-container">\
-								<div class="title event-modal">\
-                  Eventos\
-                </div>';
+								<div class="modal-event">\
+								<div class="modal-event-container">\
+									<div class="title event-modal">'+title+'</div>';
 	}
 
 	var template_single_day = function(day){
@@ -118,10 +125,10 @@
 	}
 
 	var template_single_sessions = function(session){
-		return '<div class="event-hours">'+session.opening+' '+session.closing+'</div>\
-						<div class="event-title">'+session.title+'</div>\
-						</div>\
-						</div>';
+				return '<div>\
+									<div class="event-hours">'+session.opening+' '+session.closing+'</div>\
+									<div class="event-title">'+session.title+'</div>\
+								</div>';
 	}
 
 
@@ -148,8 +155,6 @@
 
 
 	function prepareSpeaker(data) {
-
-			console.log(data);
 
 			var speaker_sessions = [];
 
