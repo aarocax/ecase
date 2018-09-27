@@ -1,0 +1,50 @@
+
+speakers:
+
+https://www.bbvaopensummit.com/api/v1/events/33882/speakers?language="+language+"&type=speaker
+
+proxy: https://opensummit.bbva.com/bbva-components/proxy/1532593871837?project=j7ixm52m&event_id=33882&language=en
+
+
+speaker sessions:
+https://www.bbvaopensummit.com/api/v1/events/33882/speakers/"+speaker_id+"/sessions
+
+proxy http://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538030130332?project=j7ixm52m&event_id=33882&speaker_id=20134
+
+
+
+sessions:
+
+days:
+
+https://www.bbvaopensummit.com/api/v1/events/33882/days
+
+http://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538030744484?project=j7ixm52m&event_id=33882
+
+sessions:
+
+https://www.bbvaopensummit.com/api/v1/events/33882/sessions
+http://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538030984068?project=j7ixm52m&event_id=33882
+
+
+session_speakers
+
+https://www.bbvaopensummit.com/api/v1/events/33882/sessions/"+session_id+"/speakers
+
+http://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538031128708?project=j7ixm52m&event_id=33882&session_id=20134
+
+streams
+
+https://www.bbvaopensummit.com/api/v1/events/33882/streams
+
+http://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538031427332?project=j7ixm52m&event_id=33882
+
+
+
+
+
+// 
+
+llama al proxy
+
+https://opensummit.bbva.com/bbva-components/proxy/1532593871837?project=j7ixm52m&event_id=33882?language=en

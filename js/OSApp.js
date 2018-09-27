@@ -41,7 +41,7 @@
 				api_sessions_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions";
 				api_days_url     = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/days";
 				api_streams_url  = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/streams";
-				api_sponsors_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors";
+				api_sponsors_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors?languaje="+language;
 				pathname = "/bbva/opensummit18/wordpress/";
 				proxy = "wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=";
 				proxy_url = protocol+hostname+pathname+proxy;
@@ -53,7 +53,7 @@
 				api_sessions_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions";
 				api_days_url     = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/days";
 				api_streams_url  = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/streams";
-				api_sponsors_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors";
+				api_sponsors_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors?languaje="+language;
 				pathname = "/opensummit-api/";
 				proxy = "proxy.php?object=";
 				proxy_url = protocol+hostname+pathname+proxy;
@@ -184,9 +184,7 @@
     }
 
     var setSponsors = function(data){
-    	sponsors = data.filter(function(e){
-    		return (e.languaje == language);
-    	});
+    	sponsors = data;
     }
 
     var getSponsors = function(){

@@ -34,6 +34,7 @@
 	});
 
 	function Init(){
+		console.log(OSApp.getSponsors());
 		printSpeakers(OSApp.getSponsors());
 	}
 

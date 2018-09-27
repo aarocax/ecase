@@ -31,10 +31,10 @@
 	});
 
 	function Init(){
-		// console.log("speakers:");
-		// console.log(OSApp.getSpeakers());
-		// console.log("sessions:");
-		// console.log(OSApp.getSessions());
+		console.log("speakers:");
+		console.log(OSApp.getSpeakers());
+		console.log("sessions:");
+		console.log(OSApp.getSessions());
 		// console.log("streams:");
 		// console.log(OSApp.getSessions());
 		printSpeakers(OSApp.getSpeakers());
