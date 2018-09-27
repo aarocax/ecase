@@ -132,7 +132,7 @@
 		var speaker_id = e.currentTarget.dataset.speaker;
 		var speaker_request = OSApp.getSpeakerById(speaker_id);
 
-		var speaker_sessions_request = OSApp.get(OSApp.getProxyUrl()+"https://www.bbvaopensummit.com/api/v1/events/33882/speakers/"+speaker_id+"/sessions")
+		var speaker_sessions_request = OSApp.get(OSApp.get(OSApp.getProxyUrl()+'1538030130332?project=j7ixm52m&event_id=33882&speaker_id='+speaker_id)
 		$.when (speaker_sessions_request)
 			.done(function (data) {
 			  var sessions = prepareSpeaker(data);

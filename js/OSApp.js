@@ -11,6 +11,8 @@
 	var sponsors;   // Array of sponsors objects
 	var rooms = []; // Array with rooms names
 	var event_program; // JOSN with all program of event
+
+	var event_id = 33882;
 	
 	// path url
 	var protocol = window.location.protocol+"//";
@@ -29,37 +31,45 @@
 	var language = ( window.location.href.indexOf("/en/") === -1 ) ? "ES" : "EN" ;
 
 	switch(window.location.hostname) {
-    case 'opensummit.bbva.com':
-				pathname = "";
-				proxy = "http://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1532593871837?project=j7ixm52m&event_id=33882?language=en";
-				proxy_url = protocol+hostname+pathname+proxy;
-				base_url = ((language === "ES") ? protocol+hostname+pathname : protocol+hostname+pathname+'/en/');
-				media_url =  protocol+hostname+pathname+'wp-content/themes/opensummit/assets/';
-        break;
+
     case 'centauri.mmedios.local':
-    		api_speakers_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/speakers?language="+language+"&type=speaker"
-				api_sessions_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions";
-				api_days_url     = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/days";
-				api_streams_url  = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/streams";
-				api_sponsors_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors?languaje="+language;
+    		api_speakers_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/speakers?language="+language+"&type=speaker"
+				api_sessions_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/sessions";
+				api_days_url     = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/days";
+				api_streams_url  = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/streams";
+				api_sponsors_url = "http://centauri.mmedios.local/bbva/opensummit18/wordpress/wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/sponsors?languaje="+language;
 				pathname = "/bbva/opensummit18/wordpress/";
 				proxy = "wp-content/themes/opensummit/inc/eventcase-api/proxy.php?object=";
 				proxy_url = protocol+hostname+pathname+proxy;
 				base_url = ((language === "ES") ? protocol+hostname+pathname : protocol+hostname+pathname+'en/');
 				media_url =  protocol+hostname+pathname+'wp-content/themes/opensummit/assets/';
         break;
-    default:
-    		api_speakers_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/speakers?language="+language+"&type=speaker"
-				api_sessions_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sessions";
-				api_days_url     = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/days";
-				api_streams_url  = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/streams";
-				api_sponsors_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/33882/sponsors?languaje="+language;
+
+    case 'localhost':
+    		api_speakers_url = 'http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/'+event_id+'/speakers?language="+language+"&type=speaker';
+				api_sessions_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/sessions";
+				api_days_url     = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/days";
+				api_streams_url  = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/streams";
+				api_sponsors_url = "http://localhost/opensummit-api/proxy.php?object=https://www.bbvaopensummit.com/api/v1/events/"+event_id+"/sponsors?languaje="+language;
 				pathname = "/opensummit-api/";
 				proxy = "proxy.php?object=";
 				proxy_url = protocol+hostname+pathname+proxy;
 				base_url = ((language === "ES") ? protocol+hostname+pathname : protocol+hostname+pathname+'/en/');
 				media_url =  protocol+hostname+pathname+'assets/';
 				break;
+
+			default:
+    		api_speakers_url = 'https://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1532593871837?project=j7ixm52m&event_id='+event_id+'&language='+language;
+				api_sessions_url = 'https://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538030984068?project=j7ixm52m&event_id='+event_id;
+				api_days_url     = 'https://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538030744484?project=j7ixm52m&event_id='+event_id;
+				api_streams_url  = 'https://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538031427332?project=j7ixm52m&event_id='+event_id;
+				api_sponsors_url = 'https://d3tyxp27ycvz01.cloudfront.net/bbva-components/proxy/1538044996215?project=j7ixm52m&event_id='+event_id+'&language='+language;
+				pathname = "";
+				proxy = "bbva-components/proxy/";
+				proxy_url = protocol+hostname+pathname+proxy;
+				base_url = ((language === "ES") ? protocol+hostname+pathname : protocol+hostname+pathname+'/en/');
+				media_url =  protocol+hostname+pathname+'wp-content/themes/opensummit/assets/';
+        break;
 	}
 
 	var OSApp = (function () {

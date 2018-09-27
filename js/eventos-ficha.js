@@ -140,7 +140,7 @@
 
 
 	function getSpeakersBySession(session_id, callback) {
-		var session_speakers_request = OSApp.get(OSApp.getProxyUrl()+'https://www.bbvaopensummit.com/api/v1/events/33882/sessions/'+session_id+'/speakers');
+		var session_speakers_request = OSApp.get(OSApp.getProxyUrl()+'1538031128708?project=j7ixm52m&event_id=33882&session_id='+session_id)
 
 		$.when (session_speakers_request)
 			.done(function (data) {
